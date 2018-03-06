@@ -1,0 +1,22 @@
+{
+  "name": "gladius-control-daemon",
+  "version": "0.1.0",
+  "description": "Gladius Node.js Control Daemon",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gladiusio/gladius-control-daemon.git"
+  },
+  "author": "Gladius Inc.",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/gladiusio/gladius-control-daemon/issues"
+  },
+  "homepage": "https://github.com/gladiusio/gladius-control-daemon#readme",
+  "dependencies": {
+    "web3": "^1.0.0-beta.30"
+  }
+}
