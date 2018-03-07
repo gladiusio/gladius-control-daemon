@@ -5,6 +5,8 @@
  *    Node Signup      *
  ***********************/
 
+//let nodeABI = require('../build/contracts/Node.json')
+
 class Node {
 
   // Grab the configured web3 instance
@@ -12,26 +14,8 @@ class Node {
     this.web3 = web3
   }
 
-  account() {
-    return this.account
-  }
-
-  accountSet(privateKey) {
-    this.account = this.web3.eth.accounts.privateKeyToAccount(privateKey)
-    this.wallet = this.web3.eth.accounts.wallet.add(this.account)
-    return this.account
-  }
-
-  accountWalletStatus() {
-    console.log(this.wallet)
-  }
-
-  // Unlock Meta-Mask Wallet
-  accountUnlockWallet() {}
-
   // Create Node
   accountCreate() {
-    console.log(this.web3)
     console.log('Create an Account')
   }
 

@@ -2,7 +2,15 @@
  *  Pool Approve Node  *
  ***********************/
 
+let poolJSON = require('../build/contracts/Pool.json')
+let poolABI = poolJSON.abi
+
 class Pool {
+
+  constructor(web3, address) {
+    this.web3 = web3
+    this.contract = new web3.eth.Contract(poolABI, address)
+  }
 
   // Request Approval
   nodesJoinRequest() {}
@@ -31,4 +39,4 @@ class Pool {
   nodesStatusPending() {}
 }
 
-module.export = Pool
+module.exports = Pool
