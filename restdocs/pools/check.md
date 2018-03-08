@@ -3,7 +3,7 @@
 Get the details of the currently Authenticated User along with basic
 subscription information.
 
-**URL** : `/api/pools/check/:address/`
+**URL** : `/api/pools/check/:pool/`
 
 **Method** : `GET`
 
