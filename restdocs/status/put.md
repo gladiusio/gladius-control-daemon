@@ -10,7 +10,7 @@ Allows the user to set whether they want to serve content or not. Will inform th
 
 **Permissions required** : None
 
-**Data constraints**
+**Data to provide*
 
 ```json
 {
