@@ -2,7 +2,7 @@
 
 Join the specified pool with the application information. 
 
-**URL** : `/api/pools/join`
+**URL** : `/api/pools/join/:pool`
 
 **Method** : `POST`
 
@@ -16,10 +16,11 @@ Provide information to the daemon (which it encrypts) and sends to the specified
 
 ```json
 {
-    "pool_id": "some address here",
     "init_info":{
       "name": "",
-      "email": ""
+      "email": "",
+      "private_key": "",
+      "bio": ""
     }
 }
 ```
