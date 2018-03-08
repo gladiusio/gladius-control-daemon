@@ -10,7 +10,7 @@ Join the specified pool with the application information.
 
 **Permissions required** : None
 
-**Data constraints**
+**Data to provide**
 
 Provide information to the daemon (which it encrypts) and sends to the specified pool.
 
