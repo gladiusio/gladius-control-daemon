@@ -18,8 +18,8 @@ Provide information to the daemon (which it encrypts) and sends to the specified
 {
     "pool_id": "some address here",
     "init_info":{
-      name: "",
-      email: ""
+      "name": "",
+      "email": ""
     }
 }
 ```
