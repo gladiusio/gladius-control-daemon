@@ -33,5 +33,4 @@ Returns a list of pool objects
 
 ## Notes
 
-* If the User does not have a `UserInfo` instance when requested then one will
-  be created for them.
+* Will add filtering eventually.
