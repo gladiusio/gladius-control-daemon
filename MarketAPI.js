@@ -6,9 +6,6 @@ class Market {
     this.web3 = web3
     this.contract = new web3.eth.Contract(marketABI, address)
     this.wallet = web3.eth.accounts.wallet[0]
-  
-    // TODO temp Account address setting
-    this.wallet.address = '0x5e847d437e453c744a6d249aef699b2cc93cd445'
   }
 
   owner(callback) {
@@ -20,7 +17,7 @@ class Market {
   }
 
   poolsOwned(owner, callback) {
-    this.contract.methods.getOwnedPools(owner).call(callback) 
+    this.contract.methods.getOwnedPools(owner).call(callback)
   }
 
   poolsCreate(publicKey, callback) {
@@ -28,7 +25,7 @@ class Market {
     self.contract.methods.createPool(publicKey).estimateGas({ from: self.wallet.address })
       .then(function(gasAmount) {
         self.contract.methods.createPool(publicKey).send({ from: self.wallet.address, gas: gasAmount }, callback)
-      }) 
+      })
   }
 
   clientAllocateFunds() {}
