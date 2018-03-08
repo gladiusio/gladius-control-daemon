@@ -2,11 +2,14 @@
 // Temporary import until migrated into main js file
 let Web3 = require('web3')
 let web3 = new Web3()
-let provider = new web3.providers.HttpProvider('http://127.0.0.1:9545')
-web3.setProvider(provider)
+let ganache = require("ganache-cli")
+web3.setProvider(ganache.provider());
+//let provider = new web3.providers.HttpProvider('http://127.0.0.1:8545')
+//web3.setProvider(provider)
 
 // Fake Private Key
-let account = web3.eth.accounts.privateKeyToAccount('0x348ce564d427a3311b6536bbcff9390d69395b06ed6c486954e971d960fe8709')
+let account = web3.eth.accounts.privateKeyToAccount('c607271a0dc04419443a02335834d157cba39d9c4bad4e955275119194000d05')
+console.log(account)
 web3.eth.accounts.wallet.add(account)
 
 
@@ -22,7 +25,7 @@ web3.eth.accounts.wallet.add(account)
 
 //console.log(pool.contract)
 let Market = require('./MarketAPI')
-let market = new Market(web3, '0x30753e4a8aad7f8597332e813735def5dd395028')
+let market = new Market(web3, '0x6c9f4930f45b6137d4ef1550a86ff4b2822611de')
 
 market.poolsCreate('fake_key', function(error, result) {
   console.log(error)

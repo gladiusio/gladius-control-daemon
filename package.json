@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/gladiusio/gladius-control-daemon#readme",
   "dependencies": {
+    "ganache-cli": "^6.1.0",
+    "npm": "^5.7.1",
     "web3": "^1.0.0-beta.30"
   }
 }

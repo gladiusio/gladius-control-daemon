@@ -8,7 +8,7 @@ class Market {
     this.wallet = web3.eth.accounts.wallet[0]
   
     // TODO temp Account address setting
-    this.wallet.address = '0x627306090abab3a6e1400e9345bc60c78a8bef57'
+    this.wallet.address = '0x5e847d437e453c744a6d249aef699b2cc93cd445'
   }
 
   owner(callback) {
