@@ -21,8 +21,12 @@ Returns a list of pool objects
 
 ```json
 {
-  [
-    {"pool_name": "Name here", "pool_desc": "Description here", "pool_address": "Address here"}
+  "pools": [
+    {
+      "pool_name": "Name here",
+      "pool_desc": "Description here",
+      "pool_address": "Address here"
+    }
   ]
 }
 ```
