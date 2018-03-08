@@ -6,6 +6,6 @@ URL will usually be in the 'http://localhost/' format.
 
 Open endpoints require no Authentication.
 
-* [Status](status/put.md) : `PUT /api/status/`
-* [Status](status/get.md) : `GET /api/status/`
+* [Update Status](status/put.md) : `PUT /api/status/`
+* [Get Status](status/get.md) : `GET /api/status/`
 
