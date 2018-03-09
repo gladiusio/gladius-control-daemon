@@ -1,4 +1,4 @@
-var router = require('express').Router()
+let router = require('express').Router()
 
 // api/products
 router.get('/pools', function(req, res) {

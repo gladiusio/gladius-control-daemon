@@ -23,7 +23,7 @@ app.use(bodyParser.json()) // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
 app.get('/',function(req,res){
-     res.sendFile('index.html', { root: __dirname + '/bin/www' })
+  res.sendFile('index.html', { root: __dirname + '/bin/www' })
 })
 
 app.use('/api', require('./routes/api'));
