@@ -1,4 +1,5 @@
 let router = require('express').Router()
+let Pool = require('../../blockchain/Pool')
 
 // GET Pool
 router.get('/:address', function(req, res) {
@@ -36,6 +37,27 @@ router.get('/:address/join', function(req, res) {
 
 router.get('/:address/status', function(req, res) {
 
+})
+
+router.get('/:address/publicKey', function(req, res) {
+  try {
+    let pool = new Pool(req.params.address)
+    pool.publicKey(function(error, publicKey) {
+      if (!error) {
+        res.json({
+          publicKey: publicKey
+        })
+      } else {
+        res.json({
+          error: error
+        })
+      }
+    })
+  } catch(error) {
+    res.json({
+      error: "Pool address provided is incorrect"
+    })
+  }
 })
 
 module.exports = router

@@ -7,9 +7,13 @@ let poolABI = poolJSON.abi
 
 class Pool {
 
-  constructor(web3, address) {
-    this.web3 = web3
+  constructor(address) {
+    this.web3 = global.web3
     this.contract = new web3.eth.Contract(poolABI, address)
+  }
+
+  publicKey(callback) {
+    this.contract.methods.getPublicKey().call(callback)
   }
 
   // Request Approval
