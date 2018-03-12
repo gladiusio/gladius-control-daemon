@@ -2,10 +2,10 @@ let marketJSON = require('../build/contracts/Market.json')
 let marketABI = marketJSON.abi
 
 class Market {
-  constructor(web3, address) {
-    this.web3 = web3
-    this.contract = new web3.eth.Contract(marketABI, address)
-    this.wallet = web3.eth.accounts.wallet[0]
+  constructor(address) {
+    this.web3 = global.web3
+    this.contract = new this.web3.eth.Contract(marketABI, address)
+    this.wallet = this.web3.eth.accounts.wallet[0]
   }
 
   owner(callback) {

@@ -10,12 +10,10 @@ let nodeABI = nodeJSON.abi
 
 class Node {
   // Grab the configured web3 instance
-  constructor(web3) {
-    this.web3 = web3
-    this.contract = new web3.eth.Contract(nodeABI)
-    this.wallet = web3.eth.accounts.wallet[0]
-
-    console.log(this.wallet.address)
+  constructor() {
+    this.web3 = global.web3
+    this.contract = new this.web3.eth.Contract(nodeABI)
+    this.wallet = this.web3.eth.accounts.wallet[0]
   }
 
   // Create Node
