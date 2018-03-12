@@ -51,7 +51,7 @@ router.post('/create', function(req, res) {
   })
 })
 
-router.get('/:address/apply/:poolAddress?', function(req, res) {
+router.post('/:address/apply/:poolAddress?', function(req, res) {
   let domain = req.protocol + '://' + req.get('host') + req.baseUrl
 
   let nodeAddress = req.params.address

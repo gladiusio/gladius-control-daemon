@@ -19,7 +19,6 @@ router.put('/', function(req, res) {
 
   // TODO toggle CLI state
 
-  console.log(req.body)
   res.json({
     api: true,
     daemons: {
