@@ -4,6 +4,7 @@ let Pool = require('../../blockchain/Pool')
 // GET Pool
 router.get('/:address', function(req, res) {
   let poolAddress = req.params.address
+  let pool = new Pool(poolAddress)
 
   let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl
 
@@ -39,6 +40,36 @@ router.get('/:address/status', function(req, res) {
 
 })
 
+router.get('/:address/data', function(req, res) {
+  try {
+    let pool = new Pool(req.params.address)
+    let data = pool.data(null, function(error, data) {
+      res.json({
+        data: data
+      })
+    })
+  } catch(error) {
+    res.json({
+      error: "Pool address provided is incorrect"
+    })
+  }
+})
+
+router.post('/:address/data', function(req, res) {
+  try {
+    let pool = new Pool(req.params.address)
+    pool.data(req.body, function(error, data) {
+      res.json({
+        data: req.body
+      })
+    })
+  } catch(error) {
+    res.json({
+      error: "Pool address provided is incorrect"
+    })
+  }
+})
+
 router.get('/:address/publicKey', function(req, res) {
   try {
     let pool = new Pool(req.params.address)
@@ -59,5 +90,17 @@ router.get('/:address/publicKey', function(req, res) {
     })
   }
 })
+
+// Might use
+function getPool(address) {
+  try {
+    let pool = new Pool(req.params.address)
+    return (null, pool)
+  } catch(error) {
+    return ({
+      error: "Pool address provided is incorrect"
+    }, null)
+  }
+}
 
 module.exports = router

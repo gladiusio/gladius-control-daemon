@@ -2,7 +2,7 @@ let Web3 = require('web3')
 
 let Control = {}
 
-Control.start = function(providerUrl, privateKey) {
+Control.start = function(providerUrl, privateKey, marketAddress, nodeFactoryAddress) {
   // Temporary import until migrated into main js file
   global.web3 = new Web3()
   let web3 = global.web3
@@ -15,11 +15,18 @@ Control.start = function(providerUrl, privateKey) {
   global.web3.eth.accounts.wallet.add(account)
 
   // TODO temp Account address setting
-  // global.web3.eth.accounts.wallet[0].address = '0xf17f52151ebef6c7334fad080c5704d77216b732'
+  global.web3.eth.accounts.wallet[0].address = '0x627306090abab3a6e1400e9345bc60c78a8bef57'
+
+  global.marketAddress = marketAddress
+  global.nodeFactoryAddress = nodeFactoryAddress
+  global.privateKey = privateKey
+
   return {
     address: global.web3.eth.accounts.wallet[0].address,
     privateKey: privateKey,
     providerUrl: providerUrl,
+    marketAddress: marketAddress,
+    nodeFactoryAddress: nodeFactoryAddress,
     running: true
   }
 }

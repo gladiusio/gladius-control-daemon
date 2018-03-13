@@ -1,4 +1,5 @@
-var router = require('express').Router()
+let router = require('express').Router()
+let NodeFactory = require('../../blockchain/NodeFactory')
 
 // api/products
 router.get('/', function(req, res) {
@@ -38,16 +39,15 @@ router.get('/:address', function(req, res) {
 router.post('/create', function(req, res) {
   let domain = req.protocol + '://' + req.get('host') + req.baseUrl
 
-  // TODO Create Node
-
-  let nodeAddress = '0x937492739472394729'
-
-  res.json({
-    data: 'Encrypted Data',
-    address: nodeAddress,
-    endpoints: {
-      poolApplication: domain + '/' + nodeAddress + '/apply',
-    }
+  let factory = new NodeFactory()
+  factory.createNode('test data', function(error, nodeAddress) {
+    res.json({
+      data: 'Encrypted Data',
+      address: nodeAddress,
+      endpoints: {
+        poolApplication: domain + '/' + nodeAddress + '/apply',
+      }
+    })
   })
 })
 

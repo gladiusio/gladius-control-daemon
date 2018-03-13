@@ -4,6 +4,8 @@ let Control = require('../../blockchain/Control')
 let address
 let privateKey
 let providerUrl
+let marketAddress
+let nodeFactoryAddress
 
 router.get('/', function(req, res) {
 
@@ -22,6 +24,8 @@ router.get('/', function(req, res) {
     running: running,
     privateKey: privateKey,
     address: address,
+    marketAddress: marketAddress,
+    nodeFactoryAddress: nodeFactoryAddress,
     providerUrl: providerUrl,
     message: message,
     endpoints: {
@@ -33,12 +37,16 @@ router.get('/', function(req, res) {
 router.post('/start', function(req, res) {
   let reqProviderUrl = req.body['provider']
   let reqPrivateKey = req.body['privateKey']
+  let reqMarketAddress = req.body['marketAddress']
+  let reqNodeFactoryAddress = req.body['nodeFactoryAddress']
 
-  let response = Control.start(reqProviderUrl, reqPrivateKey)
+  let response = Control.start(reqProviderUrl, reqPrivateKey, reqMarketAddress, reqNodeFactoryAddress)
 
   address = response.address
   privateKey = response.privateKey
   providerUrl = response.providerUrl
+  marketAddress = response.marketAddress
+  nodeFactoryAddress = response.nodeFactoryAddress
 
   res.json(response)
 })
