@@ -1,4 +1,5 @@
 let router = require('express').Router()
+let Node = require('../../blockchain/Node')
 let NodeFactory = require('../../blockchain/NodeFactory')
 
 // api/products
@@ -17,29 +18,44 @@ router.get('/:address', function(req, res) {
   let domain = req.protocol + '://' + req.get('host') + req.baseUrl
   let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl
 
-  // Get Pool Contract at address
+  let node = new Node(nodeAddress)
 
-  res.json({
-    name: 'Node Owner Name',
-    type: 'node',
-    email: 'node@fake-address.com',
-    address: nodeAddress,
-    status: 'active',
-    endpoints: {
-      create: domain + '/create',
-      applications: [
-        fullUrl + '/status/' + 'poolAddressA',
-        fullUrl + '/status/' + 'poolAddressB'
-      ],
-      status: fullUrl + '/status'
-    }
+  node.data(null, function(error, data) {
+    res.json({
+      type: 'node',
+      address: nodeAddress,
+      data: data,
+      endpoints: {
+        create: domain + '/create',
+        // applications: [
+        //   fullUrl + '/status/' + 'poolAddressA',
+        //   fullUrl + '/status/' + 'poolAddressB'
+        // ],
+        status: fullUrl + '/status'
+      }
+    })
   })
+})
+
+router.post('/:address/data', function(req, res) {
+  try {
+    let node = new Node(req.params.address)
+    node.data(req.body, function(error, data) {
+      res.json({
+        data: req.body
+      })
+    })
+  } catch(error) {
+    res.json({
+      error: "Pool address provided is incorrect"
+    })
+  }
 })
 
 router.post('/create', function(req, res) {
   let domain = req.protocol + '://' + req.get('host') + req.baseUrl
-
   let factory = new NodeFactory()
+
   factory.createNode('test data', function(error, nodeAddress) {
     res.json({
       data: 'Encrypted Data',

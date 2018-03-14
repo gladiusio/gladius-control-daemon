@@ -1,8 +1,9 @@
 let Web3 = require('web3')
+let NodeRSA = require('node-rsa')
 
 let Control = {}
 
-Control.start = function(providerUrl, privateKey, marketAddress, nodeFactoryAddress) {
+Control.start = function(providerUrl, privateKey, pgpKey, marketAddress, nodeFactoryAddress) {
   // Temporary import until migrated into main js file
   global.web3 = new Web3()
   let web3 = global.web3
@@ -20,11 +21,14 @@ Control.start = function(providerUrl, privateKey, marketAddress, nodeFactoryAddr
   global.marketAddress = marketAddress
   global.nodeFactoryAddress = nodeFactoryAddress
   global.privateKey = privateKey
+  global.pgpKey = pgpKey
+  global.key = new NodeRSA({b: 512})
 
   return {
     address: global.web3.eth.accounts.wallet[0].address,
     privateKey: privateKey,
     providerUrl: providerUrl,
+    privateRsaKey: global.key.exportKey('pkcs1-private-pem'),
     marketAddress: marketAddress,
     nodeFactoryAddress: nodeFactoryAddress,
     running: true

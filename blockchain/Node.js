@@ -11,20 +11,22 @@ let NodeRSA = require('node-rsa')
 
 class Node {
   // Grab the configured web3 instance
-  constructor() {
+  constructor(address = undefined) {
     this.web3 = global.web3
-    this.contract = new this.web3.eth.Contract(nodeABI)
+    this.contract = new this.web3.eth.Contract(nodeABI, address)
     this.wallet = this.web3.eth.accounts.wallet[0]
   }
 
-  static encryptData(privateKey, data) {
-    let key = new NodeRSA(privateKey)
-    return key.encrypt(data, 'base64')
+  static encryptData(data) {
+    let key = global.key
+    let encryptedData = key.encrypt(data, 'base64')
+    return encryptedData
   }
 
-  static decryptData(privateKey, data) {
-    let key = new NodeRSA(privateKey)
-    return key.decrypt(data, 'base64')
+  static decryptData(data) {
+    let key = global.key
+    let decryptedData = key.decrypt(data, 'utf8')
+    return JSON.parse(decryptedData)
   }
 
   // Add Private and Public Keys
@@ -36,10 +38,27 @@ class Node {
   /***********************
    *    Node Details     *
    ***********************/
-   
-  // Returns the account details for the Node
-  accountDetails(callback) {
-    this.contract.methods.getData().call(callback)
+
+  data(newData = null, callback) {
+    let self = this
+
+    if (newData) {
+      let stringifiedData = JSON.stringify(newData)
+      let encryptedData = Node.encryptData(stringifiedData)
+      // set data
+      self.contract.methods.setData(encryptedData).estimateGas({ from: self.wallet.address })
+        .then(function(gasAmount) {
+          self.contract.methods.setData(encryptedData).send({ from: self.wallet.address, gas: gasAmount }, callback)
+        })
+    } else {
+      // retrieve data
+      this.contract.methods.data().call(function(error, response) {
+        if (response) {
+          let data = Node.decryptData(response)
+          callback(error, data)
+        }
+      })
+    }
   }
 
   /***********************

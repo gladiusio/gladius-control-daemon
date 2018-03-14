@@ -13,16 +13,17 @@ class NodeFactory {
   createNode(decryptedData, callback) {
     let self = this
     let stringifiedData = JSON.stringify(decryptedData)
-    let encryptedData = Node.encryptData(global.privateKey, decryptedData)
+    let encryptedData = String(Node.encryptData(decryptedData))
+    console.log(encryptedData)
 
-    self.contract.methods.createNode(encryptedData).estimateGas({ from: self.wallet.address })
+    self.contract.methods.createNode('encryptedData').estimateGas({ from: self.wallet.address })
       .then(function(gasAmount) {
-        self.contract.methods.createNode(encryptedData).call({ from: self.wallet.address, gas: gasAmount }, function(error, response) {
-          console.log(response)
+        self.contract.methods.createNode('encryptedData').call({ from: self.wallet.address, gas: gasAmount }, function(error, response) {
           callback(error, response)
+          console.log(error)
         })
-        self.contract.methods.createNode(encryptedData).send({ from: self.wallet.address, gas: gasAmount }, function(error, response) {
-          console.log(response)
+        self.contract.methods.createNode('encryptedData').send({ from: self.wallet.address, gas: gasAmount }, function(error, response) {
+          console.log(error)
         })
       })
   }
