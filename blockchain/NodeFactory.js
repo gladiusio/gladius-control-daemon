@@ -10,20 +10,20 @@ class NodeFactory {
     this.wallet = this.web3.eth.accounts.wallet[0]
   }
 
-  createNode(decryptedData, callback) {
+  createNode(callback) {
     let self = this
-    let stringifiedData = JSON.stringify(decryptedData)
-    let encryptedData = String(Node.encryptData(decryptedData))
-    console.log(encryptedData)
 
-    self.contract.methods.createNode('encryptedData').estimateGas({ from: self.wallet.address })
+    self.contract.methods.createNode().estimateGas({ from: self.wallet.address })
       .then(function(gasAmount) {
-        self.contract.methods.createNode('encryptedData').call({ from: self.wallet.address, gas: gasAmount }, function(error, response) {
-          callback(error, response)
-          console.log(error)
-        })
-        self.contract.methods.createNode('encryptedData').send({ from: self.wallet.address, gas: gasAmount }, function(error, response) {
-          console.log(error)
+        self.contract.methods.createNode().call({ from: self.wallet.address, gas: gasAmount + 10000 }, function(callError, callAddress) {
+          console.log(callError)
+          console.log(callAddress)
+
+          self.contract.methods.createNode().send({ from: self.wallet.address, gas: gasAmount + 10000 }, function(error, response) {
+            console.log(error)
+            console.log(response)
+            callback(callError, callAddress)
+          })
         })
       })
   }

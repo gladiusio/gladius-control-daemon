@@ -46,6 +46,7 @@ router.post('/:address/data', function(req, res) {
       })
     })
   } catch(error) {
+    console.log(error)
     res.json({
       error: "Pool address provided is incorrect"
     })
@@ -56,9 +57,8 @@ router.post('/create', function(req, res) {
   let domain = req.protocol + '://' + req.get('host') + req.baseUrl
   let factory = new NodeFactory()
 
-  factory.createNode('test data', function(error, nodeAddress) {
+  factory.createNode(function(error, nodeAddress) {
     res.json({
-      data: 'Encrypted Data',
       address: nodeAddress,
       endpoints: {
         poolApplication: domain + '/' + nodeAddress + '/apply',

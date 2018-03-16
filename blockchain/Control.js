@@ -1,15 +1,34 @@
 let Web3 = require('web3')
-let NodeRSA = require('node-rsa')
+global.kbpgp = require('kbpgp')
 
 let Control = {}
 
-Control.start = function(providerUrl, privateKey, pgpKey, marketAddress, nodeFactoryAddress) {
+Control.start = function(providerUrl, privateKey, pgpKey, passphrase, marketAddress, nodeFactoryAddress) {
   // Temporary import until migrated into main js file
   global.web3 = new Web3()
   let web3 = global.web3
 
   let provider = new web3.providers.HttpProvider(providerUrl)
   web3.setProvider(provider)
+
+  global.kbpgp.KeyManager.import_from_armored_pgp({
+    armored: pgpKey
+  }, function(err, account) {
+    if (!err) {
+      if (account.is_pgp_locked()) {
+        account.unlock_pgp({
+          passphrase: passphrase
+        }, function(err) {
+          if (!err) {
+            global.account = account
+            console.log("Loaded private key with passphrase")
+          }
+        })
+      } else {
+        console.log("Loaded private key w/o passphrase")
+      }
+    }
+  })
 
   // Fake Private Key
   let account = web3.eth.accounts.privateKeyToAccount(privateKey)
@@ -22,13 +41,13 @@ Control.start = function(providerUrl, privateKey, pgpKey, marketAddress, nodeFac
   global.nodeFactoryAddress = nodeFactoryAddress
   global.privateKey = privateKey
   global.pgpKey = pgpKey
-  global.key = new NodeRSA({b: 512})
+  global.passphrase = passphrase
 
   return {
     address: global.web3.eth.accounts.wallet[0].address,
     privateKey: privateKey,
     providerUrl: providerUrl,
-    privateRsaKey: global.key.exportKey('pkcs1-private-pem'),
+    passphrase: passphrase,
     marketAddress: marketAddress,
     nodeFactoryAddress: nodeFactoryAddress,
     running: true

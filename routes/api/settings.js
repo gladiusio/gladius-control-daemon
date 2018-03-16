@@ -23,7 +23,6 @@ router.get('/', function(req, res) {
   res.json({
     running: running,
     privateKey: privateKey,
-    privateRsaKey: global.key.exportKey('pkcs1-private-pem'),
     address: address,
     marketAddress: marketAddress,
     nodeFactoryAddress: nodeFactoryAddress,
@@ -39,10 +38,11 @@ router.post('/start', function(req, res) {
   let reqProviderUrl = req.body['provider']
   let reqPrivateKey = req.body['privateKey']
   let reqPgpKey = req.body['pgpKey']
+  let reqPassphrase = req.body['passphrase']
   let reqMarketAddress = req.body['marketAddress']
   let reqNodeFactoryAddress = req.body['nodeFactoryAddress']
 
-  let response = Control.start(reqProviderUrl, reqPrivateKey, reqPgpKey, reqMarketAddress, reqNodeFactoryAddress)
+  let response = Control.start(reqProviderUrl, reqPrivateKey, reqPgpKey, reqPassphrase, reqMarketAddress, reqNodeFactoryAddress)
 
   address = response.address
   privateKey = response.privateKey

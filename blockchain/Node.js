@@ -1,61 +1,65 @@
-// JS Node API
-// web3.eth.call()
-
-/***********************
- *    Node Signup      *
- ***********************/
-
 let nodeJSON = require('../build/contracts/Node.json')
 let nodeABI = nodeJSON.abi
-let NodeRSA = require('node-rsa')
+let kbpgp = require('kbpgp')
 
 class Node {
-  // Grab the configured web3 instance
   constructor(address = undefined) {
     this.web3 = global.web3
     this.contract = new this.web3.eth.Contract(nodeABI, address)
     this.wallet = this.web3.eth.accounts.wallet[0]
   }
 
-  static encryptData(data) {
-    let key = global.key
-    let encryptedData = key.encrypt(data, 'base64')
-    return encryptedData
+  encryptData(data, callback) {
+    let stringifiedData = JSON.stringify(data)
+
+    let params = {
+      msg: stringifiedData,
+      encrypt_for: global.account,
+      sign_with: global.account
+    }
+
+    global.kbpgp.box (params, function(err, result_string, result_buffer) {
+      callback(JSON.stringify(result_string))
+    })
   }
 
-  static decryptData(data) {
-    let key = global.key
-    let decryptedData = key.decrypt(data, 'utf8')
-    return JSON.parse(decryptedData)
-  }
+  decryptData(data, callback) {
+    let ring = new kbpgp.keyring.KeyRing
+    let pgpMsg = JSON.parse(data)
+    ring.add_key_manager(global.account)
 
-  // Add Private and Public Keys
-  accountAddKeys() {}
+    kbpgp.unbox({keyfetch: ring, armored: pgpMsg }, function(err, literals) {
+      if (err != null) {
+        return console.log("Problem: " + err)
+      } else {
+        callback(JSON.parse(literals[0].toString()))
+      }
+    })
+  }
 
   // Submit Node join request for Pool
   accountSubmitJoinRequest() {}
-
-  /***********************
-   *    Node Details     *
-   ***********************/
 
   data(newData = null, callback) {
     let self = this
 
     if (newData) {
-      let stringifiedData = JSON.stringify(newData)
-      let encryptedData = Node.encryptData(stringifiedData)
-      // set data
-      self.contract.methods.setData(encryptedData).estimateGas({ from: self.wallet.address })
-        .then(function(gasAmount) {
-          self.contract.methods.setData(encryptedData).send({ from: self.wallet.address, gas: gasAmount }, callback)
-        })
+      self.encryptData(newData, function(encryptedData) {
+        // set data
+        self.contract.methods.setData(encryptedData).estimateGas({ from: self.wallet.address })
+          .then(function(gasAmount) {
+            self.contract.methods.setData(encryptedData).send({ from: self.wallet.address, gas: gasAmount }, callback)
+          })
+      })
     } else {
       // retrieve data
       this.contract.methods.data().call(function(error, response) {
         if (response) {
-          let data = Node.decryptData(response)
-          callback(error, data)
+          self.decryptData(response, function(decryptedData) {
+            callback(error, decryptedData)
+          })
+        } else {
+          callback(error, response)
         }
       })
     }
