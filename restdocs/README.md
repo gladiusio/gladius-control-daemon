@@ -6,10 +6,16 @@ URL will usually be in the 'http://localhost/' format.
 
 ### Status
 
-* [Update Status](status/put.md) : `PUT /api/status/`
-* [Get Status](status/get.md) : `GET /api/status/`
+* [Update Status](status/README.md#PUT) : `PUT /api/status/`
+* [Get Status](status/README.md#GET) : `GET /api/status/`
 
-### Pools
+### Settings
+
+
+### Node
+
+
+### Pool
 
 * [Join a pool](pools/join.md) : `POST /api/pools/join/`
 * [List all pools](pools/list.md) : `GET /api/pools/`
