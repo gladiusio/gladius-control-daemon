@@ -1,4 +1,4 @@
-# GET
+# GET /
 
 Get the current status of the daemon (running/stopped)
 
