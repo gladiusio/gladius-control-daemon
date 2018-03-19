@@ -12,14 +12,14 @@ URL will usually be in the 'http://localhost/' format.
 ### Settings
 
 * `GET  /api/settings/` : [Get Settings](settings/README.md#get-)
-* `POST /api/settings/` : [Initialize Settings](status/README.md#post-)
+* `POST /api/settings/` : [Initialize Settings](status/README.md#post-start)
 
 ### Node
 
 * `GET  /api/node/` : [Node Base](node/README.md#get-)
-* `GET  /api/node/:address` : [Node Details](node/README.md#get-node)
 * `POST /api/node/create` : [Create Node](node/README.md#post-create)
-* `POST /api/node/:address` : [Add Node Data](node/README.md#post-node-data)
+* `GET  /api/node/:address` : [Node Details](node/README.md#get-node)
+* `POST /api/node/:address/data` : [Add Node Data](node/README.md#post-node-data)
 * `GET  /api/node/:address/apply` : [Get Node Application](node/README.md#get-node-apply)
 * `POST /api/node/:address/apply/:poolAddress` : [Apply to Pool](node/README.md#post-node-apply-pool)
 * `POST /api/node/:address/status/:poolAddress` : [Node Application](node/README.md#get-node-application)

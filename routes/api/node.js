@@ -61,7 +61,9 @@ router.post('/create', function(req, res) {
     res.json({
       address: nodeAddress,
       endpoints: {
-        poolApplication: domain + '/' + nodeAddress + '/apply',
+        details: domain + '/' + nodeAddress + '/details',
+        data: domain + '/' + nodeAddress + '/data',
+        apply: domain + '/' + nodeAddress + '/apply',
       }
     })
   })

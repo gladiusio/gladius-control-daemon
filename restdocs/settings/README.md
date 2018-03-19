@@ -48,7 +48,7 @@ The API has not been configured using the `/api/settings/start`
 
 ## Notes
 
-* The private key can be generated from [here](https://pgpkeygen.com/), please use a
+* The private key can be generated from [here](https://pgpkeygen.com/), please use a new key that is not tied to anything besides this for the beta period.
 
 # POST /start
 
