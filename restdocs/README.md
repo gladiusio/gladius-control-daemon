@@ -16,13 +16,13 @@ URL will usually be in the 'http://localhost/' format.
 
 ### Node
 
-* `GET  /api/node/` : [Node Base](node/README.md#get-)
-* `POST /api/node/create` : [Create Node](node/README.md#post-create)
-* `GET  /api/node/:address` : [Node Details](node/README.md#get-node)
-* `POST /api/node/:address/data` : [Add Node Data](node/README.md#post-node-data)
-* `GET  /api/node/:address/apply` : [Get Node Application](node/README.md#get-node-apply)
-* `POST /api/node/:address/apply/:poolAddress` : [Apply to Pool](node/README.md#post-node-apply-pool)
-* `POST /api/node/:address/status/:poolAddress` : [Node Application](node/README.md#get-node-application)
+* `GET  /api/node/` : [Node Base](node/README.md#get-node)
+* `POST /api/node/create` : [Create Node](node/README.md#post-nodecreate)
+* `GET  /api/node/:address` : [Node Details](node/README.md#get-nodeaddress)
+* `POST /api/node/:address/data` : [Add Node Data](node/README.md#get-post-nodeaddressdata)
+* `GET  /api/node/:address/apply` : [Get Node Application](node/README.md#post-nodeaddressapplypooladdress)
+* `POST /api/node/:address/apply/:poolAddress` : [Apply to Pool](node/README.md#post-nodeaddressapplypooladdress)
+* `POST /api/node/:address/status/:poolAddress` : [Node Application](node/README.md#get-nodeaddressstatuspooladdress)
 
 ### Pool
 
