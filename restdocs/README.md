@@ -26,10 +26,14 @@ URL will usually be in the 'http://localhost/' format.
 
 ### Pool
 
-* `GET  /api/pool/` : [Pool Base](pool/README.md#get-)
-* `GET  /api/pool/:address/publicKey` : [Pool Public Key](pool/README.md#get-public-key)
-* `GET  /api/pool/:address/data` : [Pool Public Data](pool/README.md#get-public-data)
-* `POST /api/pool/:address/data` : [Pool Public Data](pool/README.md#post-public-data)
+* `GET  /api/pool/:address` : [Pool Details](pool/README.md#get-pooladdress)
+* `GET  /api/pool/:address/publicKey` : [Pool Public Key](pool/README.md#get-pooladdresspublickey)
+* `GET  /api/pool/:address/data` : [Pool Public Data](pool/README.md#get-post-pooladdressdata)
+* `POST /api/pool/:address/data` : [Pool Public Data](pool/README.md#get-post-pooladdressdata)
+
+### Market
+
+* `GET  /api/market/pools` : [Retrieve all Pools](market/README.md#get-pools)
 
 ## Notes
 The above methods are subject to change but breaking changes will be tagged as such.

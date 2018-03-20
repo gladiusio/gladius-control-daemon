@@ -15,7 +15,7 @@ router.get('/pools', function(req, res) {
       pool.data(null, function(error, response) {
         poolObjects.push({address: poolAddress, data: response})
         completed++
-
+        // TODO not the best way to handle this synchronously
         if (completed == addresses.length) {
           res.json({
             pools: poolObjects
