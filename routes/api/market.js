@@ -12,7 +12,7 @@ router.get('/pools', function(req, res) {
   market.pools(function(error, addresses) {
     for (let poolAddress of addresses) {
       let pool = new Pool(poolAddress)
-      pool.data(null, function(error, response) {
+      pool.publicData(null, function(error, response) {
         poolObjects.push({address: poolAddress, data: response})
         completed++
         // TODO not the best way to handle this synchronously

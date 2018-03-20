@@ -13,19 +13,19 @@ class Pool {
     this.wallet = this.web3.eth.accounts.wallet[0]
   }
 
-  data(newData = null, callback) {
+  publicData(newData = null, callback) {
     let self = this
 
     if (newData) {
       let stringifiedData = JSON.stringify(newData)
       // set data
-      self.contract.methods.setData(stringifiedData).estimateGas({ from: self.wallet.address })
+      self.contract.methods.setPublicData(stringifiedData).estimateGas({ from: self.wallet.address })
         .then(function(gasAmount) {
-          self.contract.methods.setData(stringifiedData).send({ from: self.wallet.address, gas: gasAmount }, callback)
+          self.contract.methods.setPublicData(stringifiedData).send({ from: self.wallet.address, gas: gasAmount }, callback)
         })
     } else {
       // retrieve data
-      this.contract.methods.data().call(function(error, response) {
+      this.contract.methods.publicData().call(function(error, response) {
         callback(error, JSON.parse(response))
       })
     }

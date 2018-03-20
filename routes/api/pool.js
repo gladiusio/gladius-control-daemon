@@ -32,6 +32,8 @@ router.get('/:address', function(req, res) {
   })
 })
 
+// router.
+
 router.get('/:address/join', function(req, res) {
 
 })
@@ -40,12 +42,12 @@ router.get('/:address/status', function(req, res) {
 
 })
 
-router.get('/:address/data', function(req, res) {
+router.get('/:address/publicData', function(req, res) {
   try {
     let pool = new Pool(req.params.address)
-    let data = pool.data(null, function(error, data) {
+    let publicData = pool.publicData(null, function(error, publicData) {
       res.json({
-        data: data
+        publicData: publicData
       })
     })
   } catch(error) {
@@ -55,12 +57,12 @@ router.get('/:address/data', function(req, res) {
   }
 })
 
-router.post('/:address/data', function(req, res) {
+router.post('/:address/publicData', function(req, res) {
   try {
     let pool = new Pool(req.params.address)
-    pool.data(req.body, function(error, data) {
+    pool.publicData(req.body, function(error, data) {
       res.json({
-        data: req.body
+        publicData: req.body
       })
     })
   } catch(error) {

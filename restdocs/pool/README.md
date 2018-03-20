@@ -71,11 +71,11 @@ Returns the public key of the pool
 }
 ```
 
-# GET POST /pool/:address/data
+# GET POST /pool/:address/publicData
 
 Get or replace the pool's public data
 
-**URL** : `/api/pool/:address/data`
+**URL** : `/api/pool/:address/publicData`
 
 **Method** : `GET` `POST`
 
@@ -87,7 +87,7 @@ Get or replace the pool's public data
 
 **Code** : `200 OK`
 
-**Request Data**
+**Request Public Data**
 
 ```json
 {

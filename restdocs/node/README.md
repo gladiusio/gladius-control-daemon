@@ -117,6 +117,15 @@ Get the details of a node, only the owner of the node's private key can see the 
 
 **Code** : `200 OK`
 
+```json
+{
+	"name": "Node Owner Name",
+	"email": "node2@fake-address.com",
+	"status": "active",
+	"ipAddress": "192.0.0.2"
+}
+```
+
 **Content examples**
 
 Initial endpoint for node, gives available endpoints that can be accessed
