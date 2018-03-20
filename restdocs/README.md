@@ -33,7 +33,7 @@ URL will usually be in the 'http://localhost/' format.
 
 ### Market
 
-* `GET  /api/market/pools` : [Retrieve all Pools](market/README.md#get-pools)
+* `GET  /api/market/pools` : [Retrieve all Pools](market/README.md#get-marketpools)
 
 ## Notes
 The above methods are subject to change but breaking changes will be tagged as such.
