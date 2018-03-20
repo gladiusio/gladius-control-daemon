@@ -1,4 +1,4 @@
-let nodeFactoryJSON = require('../build/contracts/NodeFactory.json')
+let nodeFactoryJSON = require('../contract_abi/NodeFactory.json')
 let Node = require('./Node')
 let nodeFactoryABI = nodeFactoryJSON.abi
 

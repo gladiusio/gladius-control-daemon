@@ -48,7 +48,7 @@ router.post('/:address/data', function(req, res) {
   } catch(error) {
     console.log(error)
     res.json({
-      error: "Pool address provided is incorrect"
+      error: "Node address provided is incorrect"
     })
   }
 })
@@ -78,6 +78,21 @@ router.post('/:address/apply/:poolAddress?', function(req, res) {
   if (poolAddress == null) {
      res.json({ error: 'poolAddress is missing in URL (/:address/apply/:poolAddress)'})
      return
+  } else {
+    try {
+      let node = new Node(nodeAddress)
+      node.data(null, function(error, data) {
+        node.accountApplyForPool(poolAddress, data, function(error, response) {
+          console.log(error)
+          console.log(response)
+        })
+      })
+    } catch(error) {
+      console.log(error)
+      res.json({
+        error: "Pool address provided is incorrect"
+      })
+    }
   }
 
   // Run poolApplication

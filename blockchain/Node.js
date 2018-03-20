@@ -1,4 +1,4 @@
-let nodeJSON = require('../build/contracts/Node.json')
+let nodeJSON = require('../contract_abi/Node.json')
 let nodeABI = nodeJSON.abi
 let kbpgp = require('kbpgp')
 
@@ -7,6 +7,26 @@ class Node {
     this.web3 = global.web3
     this.contract = new this.web3.eth.Contract(nodeABI, address)
     this.wallet = this.web3.eth.accounts.wallet[0]
+  }
+
+  encryptDataAgainstKey(data, publicKey, callback) {
+    let stringifiedData = JSON.stringify(data)
+
+    kbpgp.KeyManager.import_from_armored_pgp({
+      armored: publicKey
+    }, function(err, account) {
+      if (!err) {
+        let params = {
+          msg: stringifiedData,
+          encrypt_for: account,
+          sign_with: global.account
+        }
+
+        global.kbpgp.box (params, function(err, result_string, result_buffer) {
+          callback(JSON.stringify(result_string))
+        })
+      }
+    })
   }
 
   encryptData(data, callback) {
@@ -71,13 +91,20 @@ class Node {
 
   accountApplyForPool(poolAddress, applicationData, callback) {
     // TODO Encrypt Data against Pool's publicKey
-    let Pool = require('./PoolAPI')
-    let pool = new Pool(this.web3, poolAddress)
+    let self = this
+    let Pool = require('./Pool')
+    console.log(poolAddress)
+    let pool = new Pool(poolAddress)
 
-    pool.methods.publicKey.call().then(function(publicKey) {
+    pool.publicKey(function(error, publicKey) {
       // Run encryption
-      let encryptedData = cryptoEncrypt(applicationData, publicKey)
-      this.contract.methods.applyToPool(poolAddress, encryptedData).call(callback)
+      self.encryptDataAgainstKey(applicationData, publicKey, function(encryptedData) {
+        console.log(encryptedData)
+        self.contract.methods.applyToPool(poolAddress, encryptedData).estimateGas({ from: self.wallet.address })
+          .then(function(gasAmount) {
+            self.contract.methods.applyToPool(poolAddress, encryptedData).send({ from: self.wallet.address, gas: gasAmount + 10000 }, callback)
+          })
+      })
     })
   }
 

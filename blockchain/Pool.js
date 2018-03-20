@@ -2,7 +2,7 @@
  *  Pool Approve Node  *
  ***********************/
 
-let poolJSON = require('../build/contracts/Pool.json')
+let poolJSON = require('../contract_abi/Pool.json')
 let poolABI = poolJSON.abi
 
 class Pool {

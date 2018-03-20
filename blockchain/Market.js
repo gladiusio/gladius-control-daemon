@@ -1,4 +1,4 @@
-let marketJSON = require('../build/contracts/Market.json')
+let marketJSON = require('../contract_abi/Market.json')
 let marketABI = marketJSON.abi
 
 class Market {
