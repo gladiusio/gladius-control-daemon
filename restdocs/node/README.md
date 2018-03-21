@@ -230,10 +230,6 @@ Retrieve the status of the node application to the pool
 			"status": "Pending",
 			"code": 2
 		}
-	],
-	"applications": [
-		"http://localhost:3000/api/node/0x41C1EFb25d4A3FA4C0128bDee94B40ae444C55F4/status/0xf2beae25b23f0ccdd234410354cb42d08ed54981/status/poolAddressA",
-		"http://localhost:3000/api/node/0x41C1EFb25d4A3FA4C0128bDee94B40ae444C55F4/status/0xf2beae25b23f0ccdd234410354cb42d08ed54981/status/poolAddressB"
 	]
 }
 ```
