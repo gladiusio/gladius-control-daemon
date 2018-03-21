@@ -168,6 +168,10 @@ Apply node `address` to pool `poolAddress`
 
 *Some properties may be added or removed during development and have not been finalized*
 
+The default payload will be the Node's data that the Node submits during the onboarding process
+
+Below will be added at a later date to include in the application as supplement information
+
 ```json
 {
   "name": "Node Owner Name",
@@ -211,9 +215,25 @@ Retrieve the status of the node application to the pool
 
 ```json
 {
+	"code": 2,
 	"status": "Pending",
+	"availableStatuses": [
+		{
+			"status": "Rejected",
+			"code": 0
+		},
+		{
+			"status": "Approved",
+			"code": 1
+		},
+		{
+			"status": "Pending",
+			"code": 2
+		}
+	],
 	"applications": [
-		"http://localhost:3000/api/node/0x5241Eb39da845bfEA23Fe4096AE0176B28Ac6C7F/status/0x4957839572394/status/0xf2beae25b23f0ccdd234410354cb42d08ed54981"
+		"http://localhost:3000/api/node/0x41C1EFb25d4A3FA4C0128bDee94B40ae444C55F4/status/0xf2beae25b23f0ccdd234410354cb42d08ed54981/status/poolAddressA",
+		"http://localhost:3000/api/node/0x41C1EFb25d4A3FA4C0128bDee94B40ae444C55F4/status/0xf2beae25b23f0ccdd234410354cb42d08ed54981/status/poolAddressB"
 	]
 }
 ```
