@@ -83,11 +83,25 @@ router.post('/:address/apply/:poolAddress?', function(req, res) {
       let node = new Node(nodeAddress)
       node.data(null, function(error, data) {
         node.accountApplyForPool(poolAddress, data, function(error, response) {
-          console.log(error)
-          console.log(response)
-          res.json({
-            tx: response
-          })
+          if (error) {
+            res.json({
+              message: "An error occurred while applying, this could be a duplicate request to apply. Check the current status before trying again.",
+              endpoints: {
+                node: domain + '/' + nodeAddress,
+                status: domain + '/' + nodeAddress + '/status/' + poolAddress
+              }
+            })
+          } else {
+            res.json({
+              poolAddress: poolAddress,
+              status: 'Pending',
+              tx: response,
+              endpoints: {
+                node: domain + '/' + nodeAddress,
+                status: domain + '/' + nodeAddress + '/status/' + poolAddress
+              }
+            })
+          }
         })
       })
     } catch(error) {
@@ -97,17 +111,6 @@ router.post('/:address/apply/:poolAddress?', function(req, res) {
       })
     }
   }
-  //
-  // // Run poolApplication
-  // res.json({
-  //   data: 'Encrypted Data',
-  //   poolAddress: poolAddress,
-  //   status: 'Pending',
-  //   endpoints: {
-  //     node: domain + '/' + nodeAddress,
-  //     status: domain + '/' + nodeAddress + '/status/' + poolAddress
-  //   }
-  // })
 })
 
 router.get('/:address/status/:poolAddress?', function(req, res) {
@@ -118,29 +121,54 @@ router.get('/:address/status/:poolAddress?', function(req, res) {
 
   if (poolAddress == null) {
     res.json({
-      status: 'Provide a pool address to view status',
-      applications: [
-        fullUrl + '/status/' + 'poolAddressA',
-        fullUrl + '/status/' + 'poolAddressB'
-      ]
+      status: 'Provide a pool address to view status'
     })
   } else {
     try {
       let node = new Node(nodeAddress)
+      node.accountStatusForPool(poolAddress, function(error, status) {
+        let statusInt = parseInt(status)
+        let statusString
 
+        switch (statusInt) {
+          case 0:
+            statusString = "Rejected"
+            break;
+          case 1:
+            statusString = "Approved"
+            break;
+          case 2:
+            statusString = "Pending"
+            break;
+          default:
+            statusString = "Unknown"
+        }
+
+        res.json({
+          code: statusInt,
+          status: statusString,
+          availableStatuses: [
+            {
+              status: "Rejected",
+              code: 0
+            },
+            {
+              status: "Approved",
+              code: 1
+            },
+            {
+              status: "Pending",
+              code: 2
+            },
+          ]
+        })
+      })
     } catch(error) {
       console.log(error)
       res.json({
         error: "Node address provided is incorrect"
       })
     }
-    res.json({
-      status: 'Pending',
-      applications: [
-        fullUrl + '/status/' + 'poolAddressA',
-        fullUrl + '/status/' + 'poolAddressB'
-      ]
-    })
   }
 })
 

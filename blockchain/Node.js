@@ -90,24 +90,26 @@ class Node {
     // TODO Encrypt Data against Pool's publicKey
     let self = this
     let Pool = require('./Pool')
-    console.log(poolAddress)
     let pool = new Pool(poolAddress)
 
     pool.publicKey(function(error, publicKey) {
       // Run encryption
       self.encryptDataAgainstKey(applicationData, publicKey, function(encryptedData) {
         console.log(encryptedData)
-        self.contract.methods.applyToPool(poolAddress, encryptedData).estimateGas({ from: self.wallet.address })
-          .then(function(gasAmount) {
+        self.contract.methods.applyToPool(poolAddress, encryptedData).estimateGas({ from: self.wallet.address }, function(error, gasAmount) {
+          if (error) {
+            callback(error, gasAmount)
+          } else {
             self.contract.methods.applyToPool(poolAddress, encryptedData).send({ from: self.wallet.address, gas: gasAmount + 10000 }, callback)
-          })
+          }
+        })
       })
     })
   }
 
   // Returns the status of the Node for the given Pool Address
   accountStatusForPool(poolAddress, callback) {
-    this.contract.methods.getStatus(poolAddress).call()
+    this.contract.methods.getStatus(poolAddress).call(callback)
   }
 }
 
