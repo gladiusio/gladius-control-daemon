@@ -85,26 +85,29 @@ router.post('/:address/apply/:poolAddress?', function(req, res) {
         node.accountApplyForPool(poolAddress, data, function(error, response) {
           console.log(error)
           console.log(response)
+          res.json({
+            tx: response
+          })
         })
       })
     } catch(error) {
       console.log(error)
       res.json({
-        error: "Pool address provided is incorrect"
+        error: "Node address provided is incorrect"
       })
     }
   }
-
-  // Run poolApplication
-  res.json({
-    data: 'Encrypted Data',
-    poolAddress: poolAddress,
-    status: 'Pending',
-    endpoints: {
-      node: domain + '/' + nodeAddress,
-      status: domain + '/' + nodeAddress + '/status/' + poolAddress
-    }
-  })
+  //
+  // // Run poolApplication
+  // res.json({
+  //   data: 'Encrypted Data',
+  //   poolAddress: poolAddress,
+  //   status: 'Pending',
+  //   endpoints: {
+  //     node: domain + '/' + nodeAddress,
+  //     status: domain + '/' + nodeAddress + '/status/' + poolAddress
+  //   }
+  // })
 })
 
 router.get('/:address/status/:poolAddress?', function(req, res) {
@@ -122,6 +125,15 @@ router.get('/:address/status/:poolAddress?', function(req, res) {
       ]
     })
   } else {
+    try {
+      let node = new Node(nodeAddress)
+
+    } catch(error) {
+      console.log(error)
+      res.json({
+        error: "Node address provided is incorrect"
+      })
+    }
     res.json({
       status: 'Pending',
       applications: [

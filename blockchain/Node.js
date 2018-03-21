@@ -57,9 +57,6 @@ class Node {
     })
   }
 
-  // Submit Node join request for Pool
-  accountSubmitJoinRequest() {}
-
   data(newData = null, callback) {
     let self = this
 
