@@ -54,16 +54,14 @@ router.post('/:address/data', function(req, res) {
 })
 
 router.post('/create', function(req, res) {
-  let domain = req.protocol + '://' + req.get('host') + req.baseUrl
+  let domain = req.protocol + '://' + req.get('host')
   let factory = new NodeFactory()
 
-  factory.createNode(function(error, nodeAddress) {
+  factory.createNode(function(error, txHash) {
     res.json({
-      address: nodeAddress,
+      txHash: txHash,
       endpoints: {
-        details: domain + '/' + nodeAddress + '/details',
-        data: domain + '/' + nodeAddress + '/data',
-        apply: domain + '/' + nodeAddress + '/apply',
+        status: domain + '/api/status/tx/' + txHash
       }
     })
   })

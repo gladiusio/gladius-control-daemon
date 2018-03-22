@@ -16,10 +16,9 @@ class NodeFactory {
     self.contract.methods.createNode().estimateGas({ from: self.wallet.address })
       .then(function(gasAmount) {
         // TODO Figure out the estimateGas function return
-        self.contract.methods.createNode().call({ from: self.wallet.address, gas: gasAmount + 10000 }, function(callError, callAddress) {
-          self.contract.methods.createNode().send({ from: self.wallet.address, gas: gasAmount + 10000 }, function(error, response) {
-            callback(callError, callAddress)
-          })
+        self.contract.methods.createNode().send({ from: self.wallet.address, gas: gasAmount }, function(error, txHash) {
+          console.log(error)
+          callback(error, txHash)
         })
       })
   }

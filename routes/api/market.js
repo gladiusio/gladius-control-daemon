@@ -10,6 +10,12 @@ router.get('/pools', function(req, res) {
   let completed = 0
 
   market.pools(function(error, addresses) {
+    if (addresses.length == 0) {
+      res.json({
+        pools: []
+      })
+    }
+
     for (let poolAddress of addresses) {
       let pool = new Pool(poolAddress)
       pool.publicData(null, function(error, response) {

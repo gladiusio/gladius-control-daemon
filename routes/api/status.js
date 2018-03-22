@@ -1,4 +1,5 @@
 let router = require('express').Router()
+let Status = require('../../blockchain/Status')
 
 // api/products
 router.get('/', function(req, res) {
@@ -25,6 +26,18 @@ router.put('/', function(req, res) {
       control: dControl,
       network: nControl
     }
+  })
+})
+
+router.get('/tx/:tx', function(req, res) {
+  let status = new Status()
+  let tx = req.params.tx
+
+  status.checkTxHash(tx, function(error, response) {
+    console.log(response)
+    res.json({
+      receipt: response
+    })
   })
 })
 
