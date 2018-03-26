@@ -109,7 +109,11 @@ class Node {
 
   // Returns the status of the Node for the given Pool Address
   accountStatusForPool(poolAddress, callback) {
-    this.contract.methods.getStatus(poolAddress).call(callback)
+    let self = this
+
+    this.contract.methods.getStatus(poolAddress).call({from: self.wallet.address }, function(error, response) {
+      callback(error, response)
+    })
   }
 }
 

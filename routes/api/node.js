@@ -33,10 +33,6 @@ router.get('/:address', function(req, res) {
       data: data,
       endpoints: {
         create: domain + '/create',
-        // applications: [
-        //   fullUrl + '/status/' + 'poolAddressA',
-        //   fullUrl + '/status/' + 'poolAddressB'
-        // ],
         status: fullUrl + '/status'
       }
     })
