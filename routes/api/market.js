@@ -32,4 +32,21 @@ router.get('/pools', function(req, res) {
   })
 })
 
+router.post('/pools/create', function(req, res) {
+  let domain = req.protocol + '://' + req.get('host')
+
+  let market = new Market(global.marketAddress)
+  let publicKey = req.body.publicKey
+
+  market.poolsCreate(publicKey, function(error, txHash) {
+    console.log(error)
+    res.json({
+      txHash: txHash,
+      endpoints: {
+        status: domain + '/api/status/tx/' + txHash
+      }
+    })
+  })
+})
+
 module.exports = router
