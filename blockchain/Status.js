@@ -6,7 +6,13 @@ class Status {
   }
 
   checkTxHash(tx, callback) {
-    this.web3.eth.getTransactionReceipt(tx, callback)
+    let self = this
+
+    self.web3.eth.getTransaction(tx, function(error, transaction) {
+      self.web3.eth.getTransactionReceipt(tx, function(receiptError, receipt) {
+        callback(null, { transaction: transaction, receipt: receipt })
+      })
+    })
   }
 }
 

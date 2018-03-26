@@ -10,6 +10,10 @@ class NodeFactory {
     this.wallet = this.web3.eth.accounts.wallet[0]
   }
 
+  addressForOwner(callback) {
+    this.contract.methods.getNodeAddress().call({ from: this.wallet.address }, callback)
+  }
+
   createNode(callback) {
     let self = this
 
@@ -17,7 +21,6 @@ class NodeFactory {
       .then(function(gasAmount) {
         // TODO Figure out the estimateGas function return
         self.contract.methods.createNode().send({ from: self.wallet.address, gas: gasAmount }, function(error, txHash) {
-          console.log(error)
           callback(error, txHash)
         })
       })

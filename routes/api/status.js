@@ -35,9 +35,7 @@ router.get('/tx/:tx', function(req, res) {
 
   status.checkTxHash(tx, function(error, response) {
     console.log(response)
-    res.json({
-      receipt: response
-    })
+    res.json(response)
   })
 })
 

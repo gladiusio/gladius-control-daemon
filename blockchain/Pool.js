@@ -9,6 +9,7 @@ class Pool {
 
   constructor(address) {
     this.web3 = global.web3
+    console.log(address)
     this.contract = new web3.eth.Contract(poolABI, address)
     this.wallet = this.web3.eth.accounts.wallet[0]
   }
@@ -18,15 +19,33 @@ class Pool {
 
     if (newData) {
       let stringifiedData = JSON.stringify(newData)
+      // let base64String = Buffer.from(stringifiedData).toString('base64')
+      // console.log(base64String)
       // set data
       self.contract.methods.setPublicData(stringifiedData).estimateGas({ from: self.wallet.address })
         .then(function(gasAmount) {
-          self.contract.methods.setPublicData(stringifiedData).send({ from: self.wallet.address, gas: gasAmount }, callback)
+          console.log(gasAmount)
+          self.contract.methods.setPublicData(stringifiedData).send({ from: self.wallet.address, gas: gasAmount }, function(error, response) {
+            console.log(error)
+            console.log(response)
+            callback(error, response)
+          })
         })
     } else {
       // retrieve data
+      console.log("retrieve")
       this.contract.methods.publicData().call(function(error, response) {
-        callback(error, JSON.parse(response))
+        if (response) {
+          console.log(response)
+          let parsedResponse = JSON.parse(response)
+          if (parsedResponse) {
+            callback(error, parsedResponse)
+          } else {
+            callback(error, response)
+          }
+        } else {
+          callback(error, '')
+        }
       })
     }
   }
@@ -35,9 +54,6 @@ class Pool {
     this.contract.methods.publicKey().call(callback)
   }
 
-  // Request Approval
-  nodesJoinRequest() {}
-
   // Approve / Deny Node request
   nodesGetPermission() {}
 
@@ -45,10 +61,6 @@ class Pool {
 
   // Adds Node to the Approved list
   nodesApproveRequest() {}
-
-  /***************************
-   *  Pool Node Interaction  *
-   ***************************/
 
   nodes() {}
 

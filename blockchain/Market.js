@@ -16,8 +16,13 @@ class Market {
     this.contract.methods.getAllPools().call(callback)
   }
 
-  poolsOwned(owner, callback) {
-    this.contract.methods.getOwnedPools(owner).call(callback)
+  poolsOwned(owner = null, callback) {
+    let self = this
+    if (owner) {
+      this.contract.methods.getOwnedPools(owner).call(callback)
+    } else {
+      this.contract.methods.getOwnedPools(self.wallet.address).call(callback)
+    }
   }
 
   poolsCreate(publicKey, callback) {

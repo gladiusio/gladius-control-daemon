@@ -1,45 +1,47 @@
 let router = require('express').Router()
+let Market = require('../../blockchain/Market')
 let Pool = require('../../blockchain/Pool')
 
 // GET Pool
+router.get('/', function(req, res) {
+  let domain = req.protocol + '://' + req.get('host') + req.baseUrl
+
+  let market = new Market(global.marketAddress)
+
+  market.poolsOwned(null, function(error, response) {
+    console.log(response)
+    res.json({
+      ownedPools: response,
+      endpoints: {
+        create: domain + '/create'
+      }
+    })
+  })
+})
+
 router.get('/:address', function(req, res) {
   let poolAddress = req.params.address
   let pool = new Pool(poolAddress)
 
   let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl
 
-  // Get Pool Contract at address
-
-  res.json({
-    name: 'Pool Name',
-    location: 'United States',
-    rating: '4.5',
-    nodeCount: '23',
-    maxBandwidth: '12',
-    speed: {
-      value: '23',
-      unit: 'ms'
-    },
-    price: {
-      value: '4',
-      unit: 'Fake Money'
-    },
-    address: poolAddress,
-    endpoints: {
-      join: fullUrl + '/join',
-      status: fullUrl + '/status'
-    }
-  })
-})
-
-// router.
-
-router.get('/:address/join', function(req, res) {
-
-})
-
-router.get('/:address/status', function(req, res) {
-
+  try {
+    let pool = new Pool(req.params.address)
+    let publicData = pool.publicData(null, function(error, publicData) {
+      res.json({
+        address: poolAddress,
+        data: publicData,
+        endpoints: {
+          join: fullUrl + '/join',
+          status: fullUrl + '/status'
+        }
+      })
+    })
+  } catch(error) {
+    res.json({
+      error: "Pool address provided is incorrect"
+    })
+  }
 })
 
 router.get('/:address/publicData', function(req, res) {
@@ -62,12 +64,15 @@ router.post('/:address/publicData', function(req, res) {
     let pool = new Pool(req.params.address)
     pool.publicData(req.body, function(error, data) {
       res.json({
-        publicData: req.body
+        publicData: req.body,
+        txHash: data,
+        error: error
       })
     })
   } catch(error) {
+    console.log(error)
     res.json({
-      error: "Pool address provided is incorrect"
+      error: error
     })
   }
 })
@@ -76,15 +81,11 @@ router.get('/:address/publicKey', function(req, res) {
   try {
     let pool = new Pool(req.params.address)
     pool.publicKey(function(error, publicKey) {
-      if (!error) {
-        res.json({
-          publicKey: publicKey
-        })
-      } else {
-        res.json({
-          error: error
-        })
-      }
+      console.log(error)
+      console.log(publicKey)
+      res.json({
+        publicKey: publicKey
+      })
     })
   } catch(error) {
     res.json({

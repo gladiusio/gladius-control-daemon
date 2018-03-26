@@ -5,10 +5,16 @@ let NodeFactory = require('../../blockchain/NodeFactory')
 // api/products
 router.get('/', function(req, res) {
   let domain = req.protocol + '://' + req.get('host') + req.baseUrl
-  res.json({
-    endpoints: {
-      create: domain + '/create'
-    }
+
+  let factory = new NodeFactory()
+
+  factory.addressForOwner(function(error, response) {
+    res.json({
+      address: response,
+      endpoints: {
+        create: domain + '/create'
+      }
+    })
   })
 })
 
@@ -41,8 +47,10 @@ router.post('/:address/data', function(req, res) {
   try {
     let node = new Node(req.params.address)
     node.data(req.body, function(error, data) {
+      console.log(error)
       res.json({
-        data: req.body
+        txHash: data,
+        error: error
       })
     })
   } catch(error) {
