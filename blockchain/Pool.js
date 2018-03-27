@@ -4,12 +4,14 @@
 
 let poolJSON = require('../contract_abi/Pool.json')
 let poolABI = poolJSON.abi
+let kbpgp = require('kbpgp')
+
+let Node = require('./Node.js')
 
 class Pool {
-
   constructor(address) {
     this.web3 = global.web3
-    console.log(address)
+    this.address = address
     this.contract = new web3.eth.Contract(poolABI, address)
     this.wallet = this.web3.eth.accounts.wallet[0]
   }
@@ -19,9 +21,7 @@ class Pool {
 
     if (newData) {
       let stringifiedData = JSON.stringify(newData)
-      // let base64String = Buffer.from(stringifiedData).toString('base64')
-      // console.log(base64String)
-      // set data
+
       self.contract.methods.setPublicData(stringifiedData).estimateGas({ from: self.wallet.address })
         .then(function(gasAmount) {
           console.log(gasAmount)
@@ -33,7 +33,6 @@ class Pool {
         })
     } else {
       // retrieve data
-      console.log("retrieve")
       this.contract.methods.publicData().call(function(error, response) {
         if (response) {
           console.log(response)
@@ -54,15 +53,51 @@ class Pool {
     this.contract.methods.publicKey().call(callback)
   }
 
-  // Approve / Deny Node request
-  nodesGetPermission() {}
-
-  nodesSetPermission() {}
-
   // Adds Node to the Approved list
   nodesApproveRequest() {}
 
-  nodes() {}
+  nodes(callback) {
+    let self = this
+    self.contract.methods.getNodeList().call({ from: self.wallet.address }, callback)
+  }
+
+  nodesWithData(callback) {
+    let self = this
+    self.nodes(function(error, nodeAddresses) {
+      let nodes = []
+      let nodeDataArray = []
+      let completed = 0
+
+      if (nodeAddresses.length == 0) {
+        callback(null, [])
+      }
+
+      for (let nodeAddress of nodeAddresses) {
+        let node = new Node(nodeAddress)
+        node.poolData(self.address, function(error, nodeData) {
+          let encryptedData = JSON.parse(nodeData)
+
+          let ring = new kbpgp.keyring.KeyRing
+          ring.add_key_manager(global.account)
+
+          kbpgp.unbox({keyfetch: ring, armored: encryptedData }, function(err, literals) {
+            if (err != null) {
+              return console.log("Problem: " + err)
+            } else {
+              console.log(JSON.parse(literals[0].toString()))
+            }
+          })
+
+          nodeDataArray.push({ address: nodeAddress, data: JSON.parse(nodeData) })
+          completed++
+
+          if (completed == nodeAddresses.length) {
+            callback(null, nodeDataArray)
+          }
+        })
+      }
+    })
+  }
 
   // Returns all Approved Nodes
   nodesStatusApproved() {}
