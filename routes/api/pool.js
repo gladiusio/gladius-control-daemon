@@ -94,6 +94,36 @@ router.get('/:address/publicKey', function(req, res) {
   }
 })
 
+router.get('/:address/nodes', function(req, res) {
+  try {
+    let pool = new Pool(req.params.address)
+    pool.nodes(function(error, nodes) {
+      res.json({
+        nodes: nodes
+      })
+    })
+  } catch(error) {
+    res.json({
+      error: "Pool address provided is incorrect"
+    })
+  }
+})
+
+router.get('/:address/nodes/data', function(req, res) {
+  try {
+    let pool = new Pool(req.params.address)
+    pool.nodesWithData(function(error, data) {
+      res.json({
+        data: data
+      })
+    })
+  } catch(error) {
+    res.json({
+      error: "Pool address provided is incorrect"
+    })
+  }
+})
+
 // Might use
 function getPool(address) {
   try {

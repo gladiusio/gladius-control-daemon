@@ -82,6 +82,14 @@ class Node {
     }
   }
 
+  poolData(poolAddress, callback) {
+    let self = this
+
+    self.contract.methods.getPoolData(poolAddress).call(function(error, response) {
+      callback(error, response)
+    })
+  }
+
   /***********************
    *    Node Status      *
    ***********************/
