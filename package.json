@@ -1,6 +1,6 @@
 {
   "name": "gladius-control-daemon",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Gladius Node.js Control Daemon",
   "main": "index.js",
   "scripts": {
@@ -9,6 +9,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gladiusio/gladius-control-daemon.git"
+  },
+  "bin" : {
+    "gladius-control-daemon" : "./index.js"
   },
   "author": "Gladius Network LLC.",
   "license": "GPL-3.0",
