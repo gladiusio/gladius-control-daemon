@@ -9,7 +9,6 @@ router.get('/', function(req, res) {
   let market = new Market(global.marketAddress)
 
   market.poolsOwned(null, function(error, response) {
-    console.log(response)
     res.json({
       ownedPools: response,
       endpoints: {
@@ -114,10 +113,29 @@ router.get('/:address/nodes/data', function(req, res) {
     let pool = new Pool(req.params.address)
     pool.nodesWithData(function(error, data) {
       res.json({
-        data: data
+        nodes: data
       })
     })
   } catch(error) {
+    res.json({
+      error: "Pool address provided is incorrect"
+    })
+  }
+})
+
+router.put('/:address/nodes/:nodeAddress/status', function(req, res) {
+  try {
+    let pool = new Pool(req.params.address)
+    let nodeAddress = req.params.nodeAddress
+    let code = req.body.code
+
+    pool.nodeStatus(nodeAddress, code, function(error, response) {
+      res.json({
+        txHash: response
+      })
+    })
+  } catch(error) {
+    console.log(error)
     res.json({
       error: "Pool address provided is incorrect"
     })

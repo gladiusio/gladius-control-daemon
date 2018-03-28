@@ -34,7 +34,6 @@ router.get('/tx/:tx', function(req, res) {
   let tx = req.params.tx
 
   status.checkTxHash(tx, function(error, response) {
-    console.log(response)
     res.json(response)
   })
 })

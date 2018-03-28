@@ -1,6 +1,6 @@
 /***********************
- *  Pool Approve Node  *
- ***********************/
+*  Pool Approve Node  *
+***********************/
 
 let poolJSON = require('../contract_abi/Pool.json')
 let poolABI = poolJSON.abi
@@ -23,19 +23,17 @@ class Pool {
       let stringifiedData = JSON.stringify(newData)
 
       self.contract.methods.setPublicData(stringifiedData).estimateGas({ from: self.wallet.address })
-        .then(function(gasAmount) {
-          console.log(gasAmount)
-          self.contract.methods.setPublicData(stringifiedData).send({ from: self.wallet.address, gas: gasAmount }, function(error, response) {
-            console.log(error)
-            console.log(response)
-            callback(error, response)
-          })
+      .then(function(gasAmount) {
+        console.log(gasAmount)
+        self.contract.methods.setPublicData(stringifiedData).send({ from: self.wallet.address, gas: gasAmount }, function(error, response) {
+          console.log(error)
+          callback(error, response)
         })
+      })
     } else {
       // retrieve data
       this.contract.methods.publicData().call(function(error, response) {
         if (response) {
-          console.log(response)
           let parsedResponse = JSON.parse(response)
           if (parsedResponse) {
             callback(error, parsedResponse)
@@ -67,6 +65,7 @@ class Pool {
       let nodes = []
       let nodeDataArray = []
       let completed = 0
+      let failed = 0
 
       if (nodeAddresses.length == 0) {
         callback(null, [])
@@ -82,20 +81,45 @@ class Pool {
 
           kbpgp.unbox({keyfetch: ring, armored: encryptedData }, function(err, literals) {
             if (err != null) {
-              return console.log("Problem: " + err)
+              console.log("Problem: " + err)
+              nodeDataArray.push({ address: nodeAddress, message: "Cannot decrypt data, private key is incorrect" })
+              failed++
             } else {
-              console.log(JSON.parse(literals[0].toString()))
+              nodeDataArray.push({ address: nodeAddress, data: JSON.parse(literals[0].toString()) })
+              completed++
+            }
+
+            if (completed + failed == nodeAddresses.length) {
+              callback(null, nodeDataArray)
             }
           })
-
-          nodeDataArray.push({ address: nodeAddress, data: JSON.parse(nodeData) })
-          completed++
-
-          if (completed == nodeAddresses.length) {
-            callback(null, nodeDataArray)
-          }
         })
       }
+    })
+  }
+
+  nodeStatus(nodeAddress, code, callback) {
+    let self = this
+
+    switch (code) {
+      case 1:
+        self.acceptNode(nodeAddress, callback)
+        break
+      default:
+        break
+    }
+  }
+
+  acceptNode(nodeAddress, callback) {
+    let self = this
+
+    self.contract.methods.acceptNode(nodeAddress).estimateGas({ from: self.wallet.address })
+    .then(function(gasAmount) {
+      console.log(gasAmount)
+      self.contract.methods.acceptNode(nodeAddress).send({ from: self.wallet.address, gas: gasAmount }, function(error, response) {
+        console.log(error)
+        callback(error, response)
+      })
     })
   }
 

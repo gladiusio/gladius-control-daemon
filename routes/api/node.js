@@ -134,12 +134,15 @@ router.get('/:address/status/:poolAddress?', function(req, res) {
 
         switch (statusInt) {
           case 0:
-            statusString = "Rejected"
+            statusString = "Not Available"
             break;
           case 1:
             statusString = "Approved"
             break;
           case 2:
+            statusString = "Rejected"
+            break;
+          case 3:
             statusString = "Pending"
             break;
           default:
@@ -151,7 +154,7 @@ router.get('/:address/status/:poolAddress?', function(req, res) {
           status: statusString,
           availableStatuses: [
             {
-              status: "Rejected",
+              status: "Not Available",
               code: 0
             },
             {
@@ -159,9 +162,13 @@ router.get('/:address/status/:poolAddress?', function(req, res) {
               code: 1
             },
             {
-              status: "Pending",
+              status: "Rejected",
               code: 2
             },
+            {
+              status: "Pending",
+              code: 3
+            }
           ]
         })
       })

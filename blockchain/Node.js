@@ -18,8 +18,7 @@ class Node {
       if (!err) {
         let params = {
           msg: stringifiedData,
-          encrypt_for: account,
-          sign_with: global.account
+          encrypt_for: account
         }
 
         global.kbpgp.box (params, function(err, result_string, result_buffer) {
