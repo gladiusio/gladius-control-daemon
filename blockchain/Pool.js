@@ -98,6 +98,54 @@ class Pool {
     })
   }
 
+  nodesApproved(callback) {
+    let self = this
+    self.nodes(function(error, nodeAddresses) {
+      let nodes = []
+      let nodeDataArray = []
+      let completed = 0
+      let failed = 0
+
+      if (nodeAddresses.length == 0) {
+        callback(null, [])
+      }
+
+      for (let nodeAddress of nodeAddresses) {
+        let node = new Node(nodeAddress)
+        node.accountStatusForPool(self.address, function(error, status) {
+          if (status == 1) {
+            node.poolData(self.address, function(error, nodeData) {
+              let encryptedData = JSON.parse(nodeData)
+
+              let ring = new kbpgp.keyring.KeyRing
+              ring.add_key_manager(global.account)
+
+              kbpgp.unbox({keyfetch: ring, armored: encryptedData }, function(err, literals) {
+                if (err != null) {
+                  console.log("Problem: " + err)
+                  nodeDataArray.push({ address: nodeAddress, message: "Cannot decrypt data, private key is incorrect" })
+                  failed++
+                } else {
+                  nodeDataArray.push({ address: nodeAddress, data: JSON.parse(literals[0].toString()) })
+                  completed++
+                }
+
+                if (completed + failed == nodeAddresses.length) {
+                  callback(null, nodeDataArray)
+                }
+              })
+            })
+          } else {
+            failed++
+            if (completed + failed == nodeAddresses.length) {
+              callback(null, nodeDataArray)
+            }
+          }
+        })
+      }
+    })
+  }
+
   nodeStatus(nodeAddress, code, callback) {
     let self = this
 

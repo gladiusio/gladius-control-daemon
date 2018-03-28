@@ -123,6 +123,21 @@ router.get('/:address/nodes/data', function(req, res) {
   }
 })
 
+router.get('/:address/nodes/approved', function(req, res) {
+  try {
+    let pool = new Pool(req.params.address)
+    pool.nodesApproved(function(error, data) {
+      res.json({
+        nodes: data
+      })
+    })
+  } catch(error) {
+    res.json({
+      error: "Pool address provided is incorrect"
+    })
+  }
+})
+
 router.put('/:address/nodes/:nodeAddress/status', function(req, res) {
   try {
     let pool = new Pool(req.params.address)
