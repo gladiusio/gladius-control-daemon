@@ -1,6 +1,6 @@
 {
   "name": "gladius-control-daemon",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Gladius Node.js Control Daemon",
   "main": "index.js",
   "scripts": {
