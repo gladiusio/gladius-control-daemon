@@ -11,7 +11,7 @@
     "url": "git+https://github.com/gladiusio/gladius-control-daemon.git"
   },
   "bin" : {
-    "gladius-control-daemon" : "./index.js"
+    "gladius-control" : "./index.js"
   },
   "author": "Gladius Network LLC.",
   "license": "GPL-3.0",
