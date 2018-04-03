@@ -98,7 +98,7 @@ class Pool {
     })
   }
 
-  nodesApproved(callback) {
+  nodesWithStatus(code, callback) {
     let self = this
     self.nodes(function(error, nodeAddresses) {
       let nodes = []
@@ -113,7 +113,7 @@ class Pool {
       for (let nodeAddress of nodeAddresses) {
         let node = new Node(nodeAddress)
         node.accountStatusForPool(self.address, function(error, status) {
-          if (status == 1) {
+          if (status == code) {
             node.poolData(self.address, function(error, nodeData) {
               let encryptedData = JSON.parse(nodeData)
 

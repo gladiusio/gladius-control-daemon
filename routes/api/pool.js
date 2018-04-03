@@ -123,10 +123,25 @@ router.get('/:address/nodes/data', function(req, res) {
   }
 })
 
+router.get('/:address/nodes/pending', function(req, res) {
+  try {
+    let pool = new Pool(req.params.address)
+    pool.nodesWithStatus(3, function(error, data) {
+      res.json({
+        nodes: data
+      })
+    })
+  } catch(error) {
+    res.json({
+      error: "Pool address provided is incorrect"
+    })
+  }
+})
+
 router.get('/:address/nodes/approved', function(req, res) {
   try {
     let pool = new Pool(req.params.address)
-    pool.nodesApproved(function(error, data) {
+    pool.nodesWithStatus(1,function(error, data) {
       res.json({
         nodes: data
       })
